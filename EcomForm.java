@@ -1,3 +1,5 @@
+package in.ac.spit.ecom.form;
+
 import javax.swing.*;
 
 public class EcomForm {
