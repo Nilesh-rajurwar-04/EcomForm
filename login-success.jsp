@@ -1,24 +1,39 @@
-<%@ page language="java" %>
-<!DOCTYPE html>
+<%@ page import="javax.servlet.http.*, java.util.*" %>
+<%
+    String inputUsername = request.getParameter("username");
+    String inputPassword = request.getParameter("password");
+
+    String savedUsername = null;
+    String savedPassword = null;
+
+    Cookie[] cookies = request.getCookies();
+    if(cookies != null){
+        for(Cookie c : cookies){
+            if("username".equals(c.getName())) savedUsername = c.getValue();
+            if("password".equals(c.getName())) savedPassword = c.getValue();
+        }
+    }
+
+    if(savedUsername == null || savedPassword == null 
+       || !savedUsername.equals(inputUsername) || !savedPassword.equals(inputPassword)) {
+        response.sendRedirect("login-form.jsp?error=1");
+        return;
+    }
+
+    String loginTime = new Date().toString();
+%>
+
 <html>
 <head>
-    <title>Success</title>
+    <title>Login Success</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<h2>Welcome, <%= savedUsername %></h2>
 
-<div class="container">
-    <h2>Login Successful</h2>
+<p>Username from cookie: <%= savedUsername %></p>
+<p>Login Time: <%= loginTime %></p>
 
-    <%
-        String email = (String) session.getAttribute("email");
-        String loginTime = (String) session.getAttribute("loginTime");
-    %>
-
-    <p>Welcome, <strong><%= email %></strong></p>
-    <p>You logged in at: <strong><%= loginTime %></strong></p>
-
-</div>
-
+<a href="login-form.jsp">Logout</a>
 </body>
 </html>
